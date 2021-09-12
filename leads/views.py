@@ -43,10 +43,14 @@ class LeadListView(LoginRequiredMixin ,generic.ListView):
         #Initial queryset of leads for the entire organization
         if user.is_organizer:
             # models.py에서 user와 user profile은 one to one field 관계
-            queryset = Lead.objects.filter(organization=user.userprofile)
+            queryset = Lead.objects.filter(
+                organization=user.userprofile
+            )
         else:   #organizor가 아니면 agent임
             # We can access user with logged-in user.
-            queryset = Lead.objects.filter(organization=user.agent.userprofile)
+            queryset = Lead.objects.filter(
+                organization=user.agent.organization
+            )
             # filter for the agent that is logged in
             queryset = queryset.filter(agent__user=user)
         return queryset
